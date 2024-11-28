@@ -1,0 +1,474 @@
+Docker Notes:
+==============
+
+Virtualization
+===================
+This is the process of running multiple OS's parallelly on
+a single piece of h/w.
+Here we have h/w(bare metal) on top of which we have host os
+and on the host os we install an application called as hypervisor
+On the hypervisor we can run any no of OS's as guest OS
+
+
+The disadvantage of this approach is these application running on the guest OS have to pass through n number of layers to access the H/W resources.
+
+
+Containerization
+======================
+Here we have bare metal on top of which we install the host Os
+and on the host OS we install an application called as Docker Engine.
+On the docker engine we can run any application in the form of containers
+Docker is a technology for creating these containers
+
+
+Docker achieve what is commonly called as "process isolation"
+ie all the applications(processes) have some dependency on a specific OS.
+This dependency is removed by docker and we can run them on any
+OS as containers if we have Docker engine installed
+
+
+These containers pass through less no of layers to access the h/w resources
+also organizations need not spend money on purchasing licenses of different
+OS's to maintain various applications
+
+
+Docker can be used at the stages of S/W development life cycle
+Build---->Ship--->Run
+
+
+
+Docker comes in 2 flavours
+Docker CE (Community Edition)
+Docker EE (Enterprise Edition)
+
+
+Setup of Docker on Windows 
+==============================
+1 Download docker desktop from
+  https://www.docker.com/products/docker-desktop
+
+2 Install it
+
+3 Once docker is installed we can use Power shell
+  to run the docker commands
+
+
+Install docker on Linux
+==============================
+1 Create an Ubuntu instance on Azure
+2 Connect to it using git bash
+3 Execute the below 2 commands
+  curl -fsSL https://get.docker.com -o get-docker.sh
+  sh get-docker.sh
+ 
+
+
+Images and Containers
+===========================
+- A Docker image is a combination of bin/libs that are necessary
+for a s/w application to work.
+- Initially all the s/w's of docker 
+are available in the form of docker images
+
+
+- A running instance of an image is called as a container
+
+Docker Host: The server where docker is installed is called docker host
+
+Docker Client: This is the CLI of docker where the user can execute the docker commands. The docker client accepts these commands and passes them
+to a background process called "docker daemon"
+
+
+Docker daemon: This process accepts the commands coming from the docker client
+and routes them to work on docker images or containers or the docker registry
+
+
+Docker registry: This is the cloud site of docker where docker images are
+stored.This is of two types
+1 Public Registry( hub.docker.com)
+2 Private Registry(Setup on one of our local servers)
+====================================================================
+
+
+Important docker commands
+==============================
+Working on docker images
+===============================
+1 To pull a docker image
+  docker pull image_name
+
+
+2 To search for a docker images
+  docker search image_name
+
+
+3 To upload an image into docker hub
+  docker push image_name
+
+
+4 To see the list of images that are downloaded
+  docker images
+  or
+  docker image ls
+
+
+5 To get detailed info about a docker image
+  docker image inspect image_name/image_id
+
+
+6 To delete a docker image that is not linked to any container
+  docker rmi image_name/image_id
+
+
+7 To delete a image that is linked to a container
+  docker rmi -f image_name/image_id
+
+
+8 To save the docker image as a tar file
+  docker save image_name
+
+
+9 To untar this tar file and get  image
+  docker load tarfile_name
+
+
+10 To delete all image
+   docker system prune -af
+
+
+
+
+===================================================================
+11 To create a docker image from a dockerfile
+   docker build -t image_name .
+
+
+12 To create an image from a customised container
+   docker commit container_id/container_name image_name
+
+
+Working on docker containers
+==================================
+13 To see the list of running containers
+   docker container ls or docker ps
+
+
+14 To see the list of all containers (running and stopped)
+   docker ps -a
+
+
+15 To start a container
+   docker start container_id/container_name
+
+
+16 To stop a container
+   docker stop container_id/container_name
+
+
+17 To restart a container
+   docker restart container_id/container_name
+   To restart after 10 seconds
+   docker restart -t 10 container_id/container_name
+
+
+18 To delete a stopped container
+   docker rm container_id/container_name
+
+
+19 To delete a running container
+   docker rm -f container_id/container_name
+
+
+20 To stop all running container
+   docker stop $(docker ps -aq)
+
+
+21 To delete all stopped containers
+   docker rm $(docker ps -aq)
+
+
+22 To delete all running and stopped containers
+   docker rm -f $(docker ps -aq)
+
+
+23 To get detailed info about a container
+   docker inspect container_id/container_name
+
+
+24 To see the logs genearated by a container
+   docker logs container_id/container_name
+
+
+25 To create a docker container
+   docker run image_name/image_id
+   run command options
+   ---------------------
+   --name:  USed to give a name to the container
+   --restart: Used to keep the container in runnign condition
+   -d: Used to run the container in detached mode in background
+   -it: Used to open interactive terminal in the container
+   -e: Used to pass environment varibales to the container
+   -v : Used to attach an external device or folder as a volume
+   --volumes-from: Used to share volume between multiple containers
+   -p : Used for port mapping.It will link the container port with host port.
+Eg: -p 8080:80 Here 8080 is host port(external port)
+        and 80 is container port(internal port)
+   -P: Used for automatic port mapping where the container port is
+       mapped with some host port that is greate than 30000
+   --link : Used to create a link between multiple containers to create a
+            microservices architecture.
+   --network: Used to start a container on a specific network
+   -rm : Used to delete a container on exit
+   -m: Used to specify the upper limit on the amount of memeory that 
+       a container can use
+   -c: Used to specify the upper limit on the amout of cpu a container can use
+   -ip: Used to asssign an ip to the container
+
+
+26 To see the ports used by a container
+   docker port container_id/container_name
+
+
+27 To run any process in a container from outside the container
+   docker exec -it container_id/container_name process_name
+   Eg: To run the bash process in a container
+   docker exec -it container_id/container_name bash
+
+
+28 To come out of a container without exit
+   ctrl+p,ctrl+q
+
+
+29  To go back into a container from where the interactive terminal is running
+    docker attach container_id/container_name
+
+
+30  To see the processes runnign in a container
+    docker container container_id/container_name top
+
+
+Working on docker networks
+===============================
+31 To see the list of docker networks
+   docker network ls
+
+
+32 To create a docker network
+   docker network create --driver network_type network_name
+
+
+33 To get detailed info about a network
+   docker network insepct network_name/network_id
+
+
+34 To delete a docker network
+   docker network rm network_name/network_id
+
+
+35 To connect a running container to a network
+   docker netowork connect network_name/network_id container_name/container_id
+
+
+36 To disconnect a running container to a network
+   docker netowork disconnect network_name/network_id container_name/container_id
+
+
+Working on docker volumes
+============================
+37 To see the list of docker  volumes
+   docker volume ls
+
+
+38 To create a docker volume
+   docker volume create volume_name
+
+
+39 To get detailed info about a volume
+   docker volume inspect volume_name/volume_id
+
+
+40 To delete a volume
+   docker volume rm volume_name/volume_id
+================================================================
+
+UseCase 1
+=============
+Create an nginx contaienr in detached mode and name it webserver
+Also perfrom port mapping
+
+
+docker run  --name webserver -p 8888:80 -d nginx
+
+
+To check if the nginx container is running
+docker container ls
+or 
+docker ps
+
+
+To access the nginx container from the leve of browser
+public_ip_of_dockerhost:8888
+
+UseCase
+==================
+Create an ubuntu container and launch interactive terminal
+docker run  --name u1 -it ubuntu
+
+=========================================
+Creating customized docker images
+=========================================
+This can be done in 2 ways
+1 Using docker commit command
+2 Using dockerfile
+
+
+Using the docker commit command
+====================================
+UseCase
+============
+Create an ubuntu container and install some s/w's in it.
+Save this container as an image and later create a new container from the newly created image.
+We will find all the s/w's that we installed.
+
+
+1. Create an ubuntu container
+  docker run --name u1 -it ubuntu
+
+
+2 In the container update the apt repo and install s/w's
+  apt-get update
+  apt-get install -y git
+
+
+3 Check if git is installed or not
+  git --version
+  exit
+
+
+4 Save the customised container as an image
+  docker commit u1 myubuntu
+
+
+5 Check if the new image is created or not
+  docker images
+
+
+6 Delete the previousely create ubuntu container
+  docker rm -f u1
+
+
+7 Create an new container from the above created image 
+  docker run --name u1 -it myubuntu
+
+
+8 Check for git 
+  git --version
+
+Dockerfile
+===================
+Dockerfile uses predefined keywords to create customized docker images.
+
+
+Important keyword in dockerfile
+===================================
+FROM : This is used to specify the base image from where a
+customized docker image has to be created
+
+
+MAINTAINER : This represents the name of the organization or the
+author that has created this dockerfile
+
+
+RUN :Used to run linux commands in the container
+     Generally it used to do s/w installation or  running scripts
+
+
+USER : This is used to specify who should be the default user
+       to login into the container
+
+
+COPY : Used to copy files from host to the customised image that
+       we are creating
+
+
+ADD : This is similar to copy where it can copy files from host
+      to image but ADD can also downlaod files from some remote server
+
+
+EXPOSE : USed to specify what port should be used by the container
+
+
+VOLUME : Used for automatic volume mounting ie we will have a volume
+         mounted automatically when the container start
+
+
+WORKDIR : Used to specify the default working directory of the container
+
+
+
+
+
+
+ENV : This is used to specify what environment varibles should
+     be used
+
+
+CMD : USed to run the default process of the container from outside
+      
+ENTRYPOINT : This is also used to run the default process of the container
+             
+LABEL: Used to store data about the docker image in key value pairs
+
+
+SHELL : Used to specify what shell should be by default used by the image
+
+UseCase
+===========
+Create a dockerfile to use nginx as a base image and specify
+the maintainer as madhan
+
+
+1 Create docker file
+vim dockerfile
+
+
+FROM nginx
+MAINTAINER madhan
+
+
+2 To create an image from this file
+  docker build -t mynginx .
+
+
+3 Check if the image is created or not
+  docker images
+
+UseCase
+==============
+Create a dockerfile from ubuntu base image and install 
+git in it
+
+
+1 Create dockerfile
+  vim dockerfile
+  FROM ubuntu
+  MAINTAINER madhan
+  RUN apt-get update
+  RUN apt-get install -y git
+
+
+2 Create an image from the above file
+  docker build -t myubuntu .
+
+
+3 Check if the new image is created
+  docker images
+
+
+4 Create a container from the new image and it should have git installed
+  docker run  --name u1 -it myubuntu
+  git --version
+
+
+
+
