@@ -1,0 +1,85 @@
+Task-1: Create the Custom Images Using Docker and Then Upload the Image in ACR 
+
+Steps:
+
+1. Install Docker
+
+	curl -fsSL https://get.docker.com -o install-docker.sh
+	sh install-docker.sh
+
+2. To run Docker as a Normal User
+
+	sudo groupadd docker
+	sudo usermod -aG docker $USER
+
+3. Log out from VM
+
+4. Log In Again
+
+	docker images
+	docker --version
+
+5. Create an index.html file
+	
+	vi index.html
+	paste your content
+	a) i -> Insert Mode
+	b) Paste
+	c) Press Esc Key -> type :wq
+
+6. Create an Docker File
+
+	vi Dockerfile
+	FROM nginx
+	COPY index.html /usr/share/nginx/html
+
+7. Build the Image
+
+	docker build -t (imagename) .
+
+8. Check the Images
+
+	docker images
+9. Create the Container with the Custom Image
+
+	docker run --name mycon1 -d -P (ImageName)
+
+10. Check the Container
+
+	docker ps
+
+11. Grab the Container Port and Paste it the Browser
+
+	publicip-addess:container_port
+	4.224.254.57:32771
+
+12. Create the Container Registry in Azure Portal
+
+	mention proper names
+	Go to Settings -> Click on Access Keys -> Enable Admin User
+
+13. Push an Image to the ACR
+
+	Install the Azure CLI in the VM
+	curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+	Perform Login 
+	az login
+	Tag the Image
+	docker tag imagename acr-servername/imagename
+	docker tag batch2 batch2sec01.azurecr.io/batch2
+	check the images
+	docker images
+	push the Image
+	docker push batch2sec01.azurecr.io/batch2
+
+14. Verify in ACR:
+
+	Go to Service -> Click on Repositories -> Check 
+
+================================================================================
+
+Task-2: Create the ACI from ACR
+-------------------------------
+
+	In Image Source -> Select Azure Container Registry
+	
