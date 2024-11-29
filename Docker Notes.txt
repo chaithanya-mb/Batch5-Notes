@@ -60,7 +60,19 @@ Install docker on Linux
 3 Execute the below 2 commands
   curl -fsSL https://get.docker.com -o get-docker.sh
   sh get-docker.sh
- 
+
+4 To run Docker as a Normal User
+
+	sudo groupadd docker
+	sudo usermod -aG docker $USER
+
+5 Log out from VM
+
+6 Log In Again
+
+	docker images
+	docker --version
+
 
 
 Images and Containers
