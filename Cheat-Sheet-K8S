@@ -1,1 +1,27 @@
 
+# Login to Azure
+az login
+
+# Install Azure AKS CLI
+az aks install-cli
+
+# Template
+az aks get-credentials --resource-group <Resource-Group-Name> --name <Cluster-Name>
+
+# Replace Resource Group & Cluster Name
+az aks get-credentials --resource-group aks-rg1 --name aksdemo1
+
+# List Kubernetes Worker Nodes
+kubectl get nodes 
+kubectl get nodes -o wide
+
+# List Namespaces
+kubectl get namespaces
+kubectl get ns
+
+# List Pods from all namespaces
+kubectl get pods --all-namespaces
+
+# List all k8s objects from Cluster Control plane
+kubectl get all --all-namespaces
+
